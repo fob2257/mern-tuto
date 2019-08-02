@@ -5,9 +5,7 @@ const express = require('express');
 const compression = require('compression');
 const mongoose = require('mongoose');
 
-const db = mongoose.connect(require('./src/models/connection-string'), { useNewUrlParser: true })
-  .then(() => console.log('connected!'))
-  .catch(error => console.log(error));
+const db = mongoose.connect(require('./src/models/connection-string'), { useNewUrlParser: true });
 
 const app = express();
 
@@ -20,8 +18,8 @@ app.use(express.urlencoded({
   limit: '20mb',
 }));
 
-app.use((req, res, next) => {
-  req.db = db;
+app.use(async (req, res, next) => {
+  req.db = (await db).models;
   next();
 });
 
