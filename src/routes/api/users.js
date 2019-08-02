@@ -8,7 +8,7 @@ router.route('/')
 router.route('/register/')
   .post(UsersController.registerUser);
 
-// router.route('/login/')
-//   .post(UsersController.logInUser);
+router.route('/login/')
+  .post(UsersController.logInUser);
 
 module.exports = router;

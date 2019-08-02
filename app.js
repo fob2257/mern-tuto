@@ -24,7 +24,12 @@ app.use(async (req, res, next) => {
 });
 
 app.use('/api', require('./src/routes/api'));
-
+/* eslint-disable no-unused-vars */
+app.use((error, req, res, next) => {
+  console.log(error);
+  res.status(error.status || 500).json(error);
+});
+/* eslint-enable no-unused-vars */
 /**
  * Logger
  */
