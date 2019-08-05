@@ -1,5 +1,5 @@
 const gravatar = require('gravatar');
-const User = require('../../models/User');
+const { User } = require('../../models/all-models');
 
 const {
   generateSalt,
@@ -9,12 +9,6 @@ const {
 } = require('../../services/util.services');
 
 const { generateJWT } = require('../../services/jwt.services');
-
-exports.getUserData = (req, res) => {
-  console.log(req.query);
-
-  res.json('ayyylmao');
-};
 
 exports.registerUser = async (req, res) => {
   const {
@@ -83,7 +77,7 @@ exports.logInUser = async (req, res) => {
     return res.status(400).json({ message: 'Password did not match' });
   }
 
-  const tokenTTL = 1000 * 60 * 60 * 2;
+  const tokenTTL = 60 * 60 * 2;
   const token = await generateJWT({
     id: user.id,
     name: user.firstName,
@@ -92,4 +86,13 @@ exports.logInUser = async (req, res) => {
   }, tokenTTL);
 
   res.status(200).json({ token });
+};
+
+exports.myData = (req, res) => {
+  const { user } = req;
+
+  user.password = undefined;
+  user.salt = undefined;
+
+  res.json(user);
 };

@@ -3,9 +3,9 @@ const cors = require('cors');
 const helmet = require('helmet');
 const express = require('express');
 const compression = require('compression');
-const mongoose = require('mongoose');
+const passport = require('passport');
 
-const db = mongoose.connect(require('./src/models/connection-string'), { useNewUrlParser: true });
+const { passportJwtStrategy } = require('./src/middlewares');
 
 const app = express();
 
@@ -18,18 +18,24 @@ app.use(express.urlencoded({
   limit: '20mb',
 }));
 
-app.use(async (req, res, next) => {
-  req.db = (await db).models;
-  next();
-});
+// const db = mongoose.connect(require('./src/models/connection-string'), { useNewUrlParser: true });
+// app.use(async (req, res, next) => {
+//   req.db = (await db).models;
+//   next();
+// });
+
+app.use(passport.initialize());
+passportJwtStrategy(passport);
 
 app.use('/api', require('./src/routes/api'));
+
 /* eslint-disable no-unused-vars */
 app.use((error, req, res, next) => {
   console.log(error);
   res.status(error.status || 500).json(error);
 });
 /* eslint-enable no-unused-vars */
+
 /**
  * Logger
  */
