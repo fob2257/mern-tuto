@@ -1,6 +1,8 @@
 const gravatar = require('gravatar');
 const { User } = require('../../models/all-models');
 
+const { emailUsed } = require('../../middlewares');
+
 const {
   generateSalt,
   hashPassword,
@@ -18,11 +20,9 @@ exports.registerUser = async (req, res) => {
     password,
   } = req.body;
 
-  const emailUsed = await User.count({ email }).exec();
-
-  if (emailUsed > 0) {
-    return res.status(400).json({ message: 'This email is already beign used' });
-  }
+  // if (await emailUsed(email)) {
+  //   return res.status(400).json({ message: 'This email is already beign used' });
+  // }
 
   const salt = await generateSalt();
 

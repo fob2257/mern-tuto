@@ -32,9 +32,6 @@ app.use('/api', require('./src/routes/api'));
 /* eslint-disable no-unused-vars */
 app.use((error, req, res, next) => {
   console.log(error);
-  if (error.isBoom) {
-    return res.status(400).json(error.data.map(({ message }) => ({ message })));
-  }
   res.status(error.status || 500).json(error);
 });
 /* eslint-enable no-unused-vars */

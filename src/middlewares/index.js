@@ -1,5 +1,6 @@
 const { Strategy: JwtStrategy, ExtractJwt } = require('passport-jwt');
 const { default: of } = require('await-of');
+const { validationResult } = require('express-validator');
 
 const { jwtSecret } = require('../../config/keys.json');
 const { User } = require('../models/all-models');
@@ -21,3 +22,20 @@ exports.passportJwtStrategy = (passport) => {
     /* eslint-enable no-nested-ternary */
   }));
 };
+
+exports.emailUsed = async email => (await User.count({ email }).exec()) > 0;
+
+exports.validate = (validations = []) => [
+  ...validations,
+  (req, res, next) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      const results = errors.array().map(({ msg, param }) => ({ [param]: msg }));
+
+      return res.status(400).json(results);
+    }
+
+    next();
+  },
+];
