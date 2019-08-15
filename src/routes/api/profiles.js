@@ -1,12 +1,12 @@
 const router = require('express').Router({ mergeParams: true });
 const passport = require('passport');
-const { body } = require('express-validator');
+const { body, param } = require('express-validator');
 
 const { handleUsed, validate } = require('../../middlewares');
 const { ProfilesController } = require('../../controllers/api');
 
 router.route('/')
-  // .get(passport.authenticate('jwt', { session: false }), ProfilesController.myProfile)
+  .get(ProfilesController.getProfiles)
   .post([
     passport.authenticate('jwt', { session: false }),
     validate([
@@ -106,5 +106,95 @@ router.route('/')
         .contains('linkedin').withMessage('Social linkedin must be a valid linkedin URL'),
     ]),
   ], ProfilesController.createProfile);
+
+router.route('/experience/')
+  .post([
+    passport.authenticate('jwt', { session: false }),
+    validate([
+      body('title')
+        .isLength({ min: 1 }).withMessage('Expirience title is required'),
+      body('company')
+        .isLength({ min: 1 }).withMessage('Expirience company is required'),
+      body('location')
+        .optional()
+        .isLength({ min: 2, max: 255 }).withMessage('Location must be minimum 2 characters long (255 max)'),
+      body('from')
+        .isISO8601().withMessage('Experience from must be a valid datetime'),
+      body('to')
+        .optional()
+        .isISO8601().withMessage('Experience to must be a valid datetime'),
+      body('current')
+        .optional()
+        .isBoolean().withMessage('Experience current value must be boolean'),
+      body('description')
+        .optional()
+        .isLength({ min: 2, max: 255 }).withMessage('Experience description must be minimum 2 characters long (255 max)'),
+    ]),
+  ], ProfilesController.createExperience);
+
+router.route('/experience/:id/')
+  .delete([
+    passport.authenticate('jwt', { session: false }),
+    validate([
+      param('id')
+        .isMongoId().withMessage('Expirience id must be a valid mongo id type'),
+    ]),
+  ], ProfilesController.deleteExperience);
+
+router.route('/education/')
+  .post([
+    passport.authenticate('jwt', { session: false }),
+    validate([
+      body('school')
+        .isLength({ min: 1 }).withMessage('Education school is required'),
+      body('degree')
+        .isLength({ min: 1 }).withMessage('Education degree is required'),
+      body('fieldOfStudy')
+        .isLength({ min: 1 }).withMessage('Education field of study is required'),
+      body('from')
+        .isISO8601().withMessage('Education from must be a valid datetime'),
+      body('to')
+        .optional()
+        .isISO8601().withMessage('Education to must be a valid datetime'),
+      body('current')
+        .optional()
+        .isBoolean().withMessage('Education current value must be boolean'),
+      body('description')
+        .optional()
+        .isLength({ min: 2, max: 255 }).withMessage('Education description must be minimum 2 characters long (255 max)'),
+    ]),
+  ], ProfilesController.createEducation);
+
+router.route('/education/:id/')
+  .delete([
+    passport.authenticate('jwt', { session: false }),
+    validate([
+      param('id')
+        .isMongoId().withMessage('Education id must be a valid mongo id type'),
+    ]),
+  ], ProfilesController.deleteEducation);
+
+router.route('/handle/:handle/')
+  .get([
+    validate([
+      param('handle')
+        .isLength({ min: 1 }).withMessage('Handle is required'),
+    ]),
+  ], ProfilesController.getProfileByHandle);
+
+router.route('/:id/')
+  .get([
+    validate([
+      param('id')
+        .isMongoId().withMessage('Profile id must be a valid mongo id type'),
+    ]),
+  ], ProfilesController.getProfile)
+  .delete([
+    passport.authenticate('jwt', { session: false }),
+    validate([
+      param('id')
+        .isMongoId().withMessage('Profile id must be a valid mongo id type'),
+    ]),
+  ], ProfilesController.deleteProfile);
 
 module.exports = router;

@@ -7,7 +7,7 @@ if (mongoose.connection.readyState === 0) {
 const { Schema } = mongoose;
 
 const newSchema = new Schema({
-  user: { type: Schema.Types.ObjectId, ref: 'users' },
+  user: { type: Schema.Types.ObjectId, ref: 'User' },
   handle: { type: String, required: true, max: 40 },
   company: { type: String },
   website: { type: String },

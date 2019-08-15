@@ -1,5 +1,6 @@
 const gravatar = require('gravatar');
-const { User } = require('../../models/all-models');
+const { default: of } = require('await-of');
+const { User, Profile } = require('../../models/all-models');
 
 const { emailUsed } = require('../../middlewares');
 
@@ -40,24 +41,6 @@ exports.registerUser = async (req, res) => {
     salt,
   });
 
-  // Or
-
-  // const newUser = new User({
-  //   firstName: camelCaseWord(firstName),
-  //   lastName: camelCaseWord(lastName),
-  //   email,
-  //   password: await hashPassword(password, salt),
-  //   avatar: gravatar.url(email, {
-  //     s: '200',
-  //     r: 'pg',
-  //     d: 'mm',
-  //     protocol: 'http',
-  //   }),
-  //   salt,
-  // });
-
-  // await newUser.save();
-
   newUser.password = undefined;
   newUser.salt = undefined;
 
@@ -95,4 +78,16 @@ exports.myData = (req, res) => {
   user.salt = undefined;
 
   res.json(user);
+};
+
+exports.getUserProfile = async (req, res) => {
+  const { id: user } = req.params;
+
+  const [profile, err] = await of(Profile.findOne({ user }).populate('user', ['firstName', 'lastName', 'avatar']).exec());
+
+  if (!profile) {
+    return res.status(404).json({ message: 'Profile not found' });
+  }
+
+  res.json(profile);
 };

@@ -1,6 +1,6 @@
 const router = require('express').Router({ mergeParams: true });
 const passport = require('passport');
-const { body } = require('express-validator');
+const { body, param } = require('express-validator');
 
 const { emailUsed, validate } = require('../../middlewares');
 const { UsersController } = require('../../controllers/api');
@@ -33,5 +33,13 @@ router.route('/login/')
 
 router.route('/me/')
   .get(passport.authenticate('jwt', { session: false }), UsersController.myData);
+
+router.route('/:id/profile/')
+  .get([
+    validate([
+      param('id')
+        .isMongoId().withMessage('User id must be a valid mongo id type'),
+    ]),
+  ], UsersController.getUserProfile);
 
 module.exports = router;
