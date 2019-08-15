@@ -28,7 +28,7 @@ router.route('/login/')
     body('email')
       .isEmail().withMessage('Must be a valid email'),
     body('password')
-      .optional(false).withMessage('Password is required'),
+      .isLength({ min: 1 }).withMessage('Password is required'),
   ]), UsersController.logInUser);
 
 router.route('/me/')

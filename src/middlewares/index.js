@@ -3,7 +3,7 @@ const { default: of } = require('await-of');
 const { validationResult } = require('express-validator');
 
 const { jwtSecret } = require('../../config/keys.json');
-const { User } = require('../models/all-models');
+const { User, Profile } = require('../models/all-models');
 
 exports.wrapRequest = fn => (req, res, next) => fn(req, res, next).catch(next);
 
@@ -25,8 +25,10 @@ exports.passportJwtStrategy = (passport) => {
 
 exports.emailUsed = async email => (await User.count({ email }).exec()) > 0;
 
-exports.validate = (validations = []) => [
-  ...validations,
+exports.handleUsed = async (handle, userId) => (await Profile.count({ handle, user: { $ne: userId } }).exec()) > 0;
+
+exports.validate = (validationChain = []) => [
+  ...validationChain,
   (req, res, next) => {
     const errors = validationResult(req);
 
