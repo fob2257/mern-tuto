@@ -1,4 +1,3 @@
-const { default: of } = require('await-of');
 const { Profile } = require('../../models/all-models');
 
 exports.getProfiles = async (req, res) => {
@@ -87,7 +86,7 @@ exports.deleteEducation = async (req, res) => {
 exports.getProfile = async (req, res) => {
   const { id } = req.params;
 
-  const [profile, err] = await of(Profile.findById(id).populate('user', ['firstName', 'lastName', 'avatar']).exec());
+  const profile = await Profile.findById(id).populate('user', ['firstName', 'lastName', 'avatar']).exec();
 
   if (!profile) {
     return res.status(404).json({ message: 'Profile not found' });
@@ -99,7 +98,7 @@ exports.getProfile = async (req, res) => {
 exports.getProfileByHandle = async (req, res) => {
   const { handle } = req.params;
 
-  const [profile, err] = await of(Profile.findOne({ handle }).populate('user', ['firstName', 'lastName', 'avatar']).exec());
+  const profile = await Profile.findOne({ handle }).populate('user', ['firstName', 'lastName', 'avatar']).exec();
 
   if (!profile) {
     return res.status(404).json({ message: 'Profile not found' });
