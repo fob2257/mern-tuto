@@ -2,7 +2,7 @@ const gravatar = require('gravatar');
 const { default: of } = require('await-of');
 const { User, Profile } = require('../../models/all-models');
 
-const { emailUsed } = require('../../middlewares');
+// const { emailUsed } = require('../../middlewares');
 
 const {
   generateSalt,

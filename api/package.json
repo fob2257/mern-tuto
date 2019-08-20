@@ -6,8 +6,8 @@
   "scripts": {
     "start": "node index.js",
     "server": "nodemon index.js",
-    "app-install": "npm install --prefix app",
-    "app-start": "npm start --prefix app",
+    "app-install": "npm install --prefix ../app",
+    "app-start": "npm start --prefix ../app",
     "dev": "concurrently \"npm run server\" \"npm run app-start\""
   },
   "keywords": [],
