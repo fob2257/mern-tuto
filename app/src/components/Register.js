@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
-import axios from 'axios';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 
-export default class Register extends Component {
+import { registerUser } from '../actions/userAction';
+
+class Register extends Component {
   constructor(props) {
     super(props);
 
@@ -26,32 +30,24 @@ export default class Register extends Component {
       email,
       password,
       password2,
-      errors,
     } = this.state;
 
-    if (password !== password2) {
-      return this.setState({
-        errors: {
-          password2: 'Password did not matched'
-        },
-      });
-    }
-
-    axios.post('/api/users/register/', {
+    this.props.registerUser({
       firstName,
       lastName,
       email,
       password,
-    })
-      .then(res => console.log(res))
-      .catch((error) => {
-        const { response: { data } } = error;
-
-        this.setState({
-          errors: { ...data },
-        });
-      });
+      password2,
+    }, this.props.history);
   };
+
+  componentWillReceiveProps(nextProps) {
+    const { errorReducer: errors } = nextProps;
+
+    if (errors) {
+      this.setState({ errors });
+    }
+  }
 
   render() {
     const {
@@ -80,7 +76,7 @@ export default class Register extends Component {
                     value={firstName}
                     onChange={this.onChange} />
                   {
-                    errors.hasOwnProperty('firstName') && <div className='invalid-feedback'>{errors.firstName}</div>
+                    errors.hasOwnProperty('firstName') && errors.firstName.map((value, i) => <div key={i} className='invalid-feedback'>{value}</div>)
                   }
                 </div>
                 <div className='form-group'>
@@ -92,7 +88,7 @@ export default class Register extends Component {
                     value={lastName}
                     onChange={this.onChange} />
                   {
-                    errors.hasOwnProperty('lastName') && <div className='invalid-feedback'>{errors.lastName}</div>
+                    errors.hasOwnProperty('lastName') && errors.lastName.map((value, i) => <div key={i} className='invalid-feedback'>{value}</div>)
                   }
                 </div>
                 <div className='form-group'>
@@ -105,7 +101,7 @@ export default class Register extends Component {
                     onChange={this.onChange} />
                   <small className='form-text text-muted'>This site uses Gravatar so if you want a profile image, use a Gravatar email</small>
                   {
-                    errors.hasOwnProperty('email') && <div className='invalid-feedback'>{errors.email}</div>
+                    errors.hasOwnProperty('email') && errors.email.map((value, i) => <div key={i} className='invalid-feedback'>{value}</div>)
                   }
                 </div>
                 <div className='form-group'>
@@ -117,10 +113,7 @@ export default class Register extends Component {
                     value={password}
                     onChange={this.onChange} />
                   {
-                    errors.hasOwnProperty('password') && <div className='invalid-feedback'>{errors.password}</div>
-                  }
-                  {
-                    errors.hasOwnProperty('password2') && <div className='invalid-feedback'>{errors.password2}</div>
+                    errors.hasOwnProperty('password') && errors.password.map((value, i) => <div key={i} className='invalid-feedback'>{value}</div>)
                   }
                 </div>
                 <div className='form-group'>
@@ -132,10 +125,7 @@ export default class Register extends Component {
                     value={password2}
                     onChange={this.onChange} />
                   {
-                    errors.hasOwnProperty('password') && <div className='invalid-feedback'>{errors.password}</div>
-                  }
-                  {
-                    errors.hasOwnProperty('password2') && <div className='invalid-feedback'>{errors.password2}</div>
+                    errors.hasOwnProperty('password2') && errors.password2.map((value, i) => <div key={i} className='invalid-feedback'>{value}</div>)
                   }
                 </div>
                 <input type='submit' className='btn btn-info btn-block mt-4' />
@@ -147,3 +137,18 @@ export default class Register extends Component {
     );
   };
 };
+
+Register.propTypes = {
+  registerUser: PropTypes.func.isRequired,
+  userReducer: PropTypes.object.isRequired,
+  errorReducer: PropTypes.object.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  userReducer: state.userReducer,
+  errorReducer: state.errorReducer,
+});
+
+const mapDispatchToProps = { registerUser };
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Register));
