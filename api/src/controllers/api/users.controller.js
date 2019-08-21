@@ -57,16 +57,36 @@ exports.logInUser = async (req, res) => {
   }
 
   if (!await comparePassword(password, user.password)) {
-    return res.status(400).json({ message: 'Password did not match' });
+    return res.status(400).json({ message: 'Password did not matched' });
   }
+
+  const {
+    id,
+    firstName,
+    lastName,
+    avatar,
+  } = user;
 
   const tokenTTL = 60 * 60 * 2;
   const token = await generateJWT({
-    id: user.id,
-    name: user.firstName,
-    lastname: user.lastName,
+    id,
+    firstName,
+    lastName,
+    avatar,
     email,
   }, tokenTTL);
+
+  res.status(200).json({ token });
+};
+
+exports.refreshToken = async (req, res) => {
+  const { user } = req;
+
+  user.password = undefined;
+  user.salt = undefined;
+
+  const tokenTTL = 60 * 60 * 2;
+  const token = await generateJWT({ ...user }, tokenTTL);
 
   res.status(200).json({ token });
 };

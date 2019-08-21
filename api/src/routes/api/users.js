@@ -39,6 +39,9 @@ router.route('/login/')
       .isLength({ min: 1 }).withMessage('Password is required'),
   ]), UsersController.logInUser);
 
+router.route('/refresh/')
+  .post(passport.authenticate('jwt', { session: false }), UsersController.refreshToken);
+
 router.route('/me/')
   .get(passport.authenticate('jwt', { session: false }), UsersController.myData);
 
