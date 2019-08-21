@@ -34,7 +34,11 @@ exports.validate = (validationChain = []) => [
 
     if (!errors.isEmpty()) {
       // const results = errors.array().map(({ msg, param }) => ({ [param]: msg }));
-      const results = errors.array().reduce((acc, { msg, param }) => ({ ...acc, [param]: msg }), {});
+      const results = errors.array().reduce((acc, { msg, param }) =>
+        ({
+          ...acc,
+          [param]: (param in acc) ? [...acc[param], msg] : [msg],
+        }), {});
 
       return res.status(400).json(results);
     }

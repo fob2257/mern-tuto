@@ -15,12 +15,20 @@ router.route('/register/')
       .isEmail().withMessage('Must be a valid email')
       .custom(async (value) => {
         if (await emailUsed(value)) {
-          // eslint-disable-next-line prefer-promise-reject-errors
-          return Promise.reject('This email is already beign used');
+          throw new Error('This email is already beign used');
         }
+        return true;
       }),
     body('password')
       .isLength({ min: 6, max: 255 }).withMessage('Password must be minimum 6 characters long (255 max)'),
+    body('password2')
+      .isLength({ min: 6, max: 255 }).withMessage('Confirm password must be minimum 6 characters long (255 max)')
+      .custom((value, { req: { body: { password } } }) => {
+        if (password !== value) {
+          throw new Error('Confirm password did not matched');
+        }
+        return true;
+      }),
   ]), UsersController.registerUser);
 
 router.route('/login/')
