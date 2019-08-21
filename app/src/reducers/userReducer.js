@@ -7,10 +7,21 @@ const initialState = {
 
 export const user = (state = initialState, action) => {
   switch (action.type) {
-    case ActionConstants.REGISTER_USER: {
+    // case ActionConstants.REGISTER_USER: {
+    //   return { data: action.payload };
+    // }
+
+    case ActionConstants.LOGIN_USER: {
       return {
-        ...state,
+        isAuthenticated: !(Object.keys(action.payload).length > 0),
         data: action.payload,
+      };
+    }
+
+    case ActionConstants.LOGOUT_USER: {
+      return {
+        isAuthenticated: false,
+        data: {},
       };
     }
 
