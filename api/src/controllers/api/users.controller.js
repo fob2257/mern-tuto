@@ -53,11 +53,11 @@ exports.logInUser = async (req, res) => {
   const user = await User.findOne({ email }).exec();
 
   if (!user) {
-    return res.status(404).json({ message: 'User not found' });
+    return res.status(404).json({ email: ['User not found'] });
   }
 
   if (!await comparePassword(password, user.password)) {
-    return res.status(400).json({ message: 'Password did not matched' });
+    return res.status(400).json({ password: ['Incorrect password'] });
   }
 
   const {
@@ -106,7 +106,7 @@ exports.getUserProfile = async (req, res) => {
   const [profile, err] = await of(Profile.findOne({ user }).populate('user', ['firstName', 'lastName', 'avatar']).exec());
 
   if (!profile) {
-    return res.status(404).json({ message: 'Profile not found' });
+    return res.status(404).json({ message: ['Profile not found'] });
   }
 
   res.json(profile);
