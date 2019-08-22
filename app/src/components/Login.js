@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
-export default class Login extends Component {
+import { logInUserAction } from '../actions/userAction';
+
+class Login extends Component {
   constructor(props) {
     super(props);
 
@@ -16,11 +20,26 @@ export default class Login extends Component {
   onSubmit = (e) => {
     e.preventDefault();
 
-    console.log(this.state);
+    this.props.logInUserAction({ ...this.state });
   };
 
+  componentWillReceiveProps(nextProps) {
+    const {
+      userReducer: user,
+      errorReducer: errors
+    } = nextProps;
+
+    if (user.isAuthenticated) {
+      console.log('ayyyylmao');
+    }
+
+    if (errors) {
+      this.setState({ errors });
+    }
+  }
+
   render() {
-    const { email, password } = this.state;
+    const { email, password, errors } = this.state;
 
     return (
       <div className='login'>
@@ -33,20 +52,31 @@ export default class Login extends Component {
                 <div className='form-group'>
                   <input
                     type='email'
-                    className='form-control form-control-lg'
+                    className={`form-control form-control-lg ${errors.hasOwnProperty('email') && 'is-invalid'}`}
                     placeholder='Email Address'
                     name='email'
                     value={email}
                     onChange={this.onChange} />
+                  {
+                    errors.hasOwnProperty('email') && errors.email.map((value, i) => <div key={i} className='invalid-feedback'>{value}</div>)
+                  }
+                  {/* {
+                    errors.hasOwnProperty('message') &&
+                    ((typeof errors.message === 'string' && <div className='invalid-feedback'>{errors.message}</div>)
+                      || errors.message.map((value, i) => <div key={i} className='invalid-feedback'>{value}</div>))
+                  } */}
                 </div>
                 <div className='form-group'>
                   <input
                     type='password'
-                    className='form-control form-control-lg'
+                    className={`form-control form-control-lg ${errors.hasOwnProperty('password') && 'is-invalid'}`}
                     placeholder='Password'
                     name='password'
                     value={password}
                     onChange={this.onChange} />
+                  {
+                    errors.hasOwnProperty('password') && errors.password.map((value, i) => <div key={i} className='invalid-feedback'>{value}</div>)
+                  }
                 </div>
                 <input type='submit' className='btn btn-info btn-block mt-4' />
               </form>
@@ -57,3 +87,15 @@ export default class Login extends Component {
     );
   };
 };
+
+Login.propTypes = {
+  userReducer: PropTypes.object.isRequired,
+  errorReducer: PropTypes.object.isRequired,
+  logInUserAction: PropTypes.func.isRequired,
+};
+
+const mapStateToProps = ({ userReducer, errorReducer }) => ({ userReducer, errorReducer });
+
+const mapDispatchToProps = { logInUserAction };
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login)

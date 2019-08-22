@@ -1,48 +1,44 @@
 import axios from 'axios';
-import jwtDecode from 'jwt-decode';
 
 import ActionConstants from '../constants';
-import { setAuthToken, removeAuthToken } from '../utils';
+import { setAuthToken, removeAuthToken, decodeAuthToken } from '../utils';
 
-export const registerUser = (userData, history) => dispatch =>
-  axios.post('/api/users/register/', { ...userData })
-    .then(res => history.push('/login'))
-    .catch((error) => {
-      const { response: { data } } = error;
+export const logInUserType = payload => ({ type: ActionConstants.LOGIN_USER, payload });
 
-      dispatch({
-        type: ActionConstants.GET_ERROR,
-        payload: { ...data },
-      });
-    });
+export const logOutUserType = { type: ActionConstants.LOGOUT_USER };
 
-export const logInUser = userData => dispatch =>
-  axios.post('/api/users/login/', { ...userData })
-    .then((res) => {
-      const { token } = res.data;
+export const errorType = payload => ({ type: ActionConstants.GET_ERROR, payload });
 
-      localStorage.setItem('token', token);
+/**
+ * Action Creators
+ */
 
-      setAuthToken(token);
+export const registerUserAction = (userData, history) => async (dispatch) => {
+  try {
+    const res = await axios.post('/api/users/register/', { ...userData });
+    history.push('/login');
+  } catch (error) {
+    const { response: { data } } = error;
+    dispatch(errorType(data));
+  }
+};
 
-      const decodedToken = jwtDecode(token);
+export const logInUserAction = (userData) => async (dispatch) => {
+  try {
+    const res = await axios.post('/api/users/login/', { ...userData });
+    const { token } = res.data;
 
-      dispatch({
-        type: ActionConstants.LOGIN_USER,
-        payload: { ...decodedToken },
-      });
-    })
-    .catch((error) => {
-      const { response: { data } } = error;
+    const data = await decodeAuthToken(token);
 
-      dispatch({
-        type: ActionConstants.GET_ERROR,
-        payload: { ...data },
-      });
-    });
+    setAuthToken(token);
+    dispatch(logInUserType(data));
+  } catch (error) {
+    const { response: { data } } = error;
+    dispatch(errorType(data));
+  }
+};
 
-export const logOutUser = () => (dispatch) => {
-  localStorage.removeItem('token');
+export const logOutUserAction = () => (dispatch) => {
   removeAuthToken();
-  dispatch({ type: ActionConstants.LOGOUT_USER });
+  dispatch(logOutUserType);
 };
