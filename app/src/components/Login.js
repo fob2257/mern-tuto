@@ -23,15 +23,21 @@ class Login extends Component {
     this.props.logInUserAction({ ...this.state });
   };
 
+  redirectIfAuthenticated = ({ isAuthenticated }) => (isAuthenticated) ? this.props.history.push('/dashboard') : null;
+
+  componentDidMount() {
+    const { userReducer: user } = this.props;
+
+    this.redirectIfAuthenticated(user);
+  };
+
   componentWillReceiveProps(nextProps) {
     const {
       userReducer: user,
       errorReducer: errors
     } = nextProps;
 
-    if (user.isAuthenticated) {
-      console.log('ayyyylmao');
-    }
+    this.redirectIfAuthenticated(user);
 
     if (errors) {
       this.setState({ errors });

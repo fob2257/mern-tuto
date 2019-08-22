@@ -41,8 +41,21 @@ class Register extends Component {
     }, this.props.history);
   };
 
+  redirectIfAuthenticated = ({ isAuthenticated }) => (isAuthenticated) ? this.props.history.push('/dashboard') : null;
+
+  componentDidMount() {
+    const { userReducer: user } = this.props;
+
+    this.redirectIfAuthenticated(user);
+  };
+
   componentWillReceiveProps(nextProps) {
-    const { errorReducer: errors } = nextProps;
+    const {
+      userReducer: user,
+      errorReducer: errors,
+    } = nextProps;
+
+    this.redirectIfAuthenticated(user);
 
     if (errors) {
       this.setState({ errors });
