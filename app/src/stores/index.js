@@ -25,7 +25,7 @@ const middleware = [
 ];
 
 export const storeFactory = (initialState = {}) =>
-  compose(applyMiddleware(...middleware), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())(createStore)(
+  compose(applyMiddleware(...middleware), window.__REDUX_DEVTOOLS_EXTENSION__ ? window.__REDUX_DEVTOOLS_EXTENSION__() : f => f)(createStore)(
     combineReducers({ userReducer, errorReducer }),
     initialState
   );
