@@ -41,4 +41,6 @@ export const logInUserAction = (userData) => async (dispatch) => {
 export const logOutUserAction = () => (dispatch) => {
   removeAuthToken();
   dispatch(logOutUserType);
+
+  window.location.href = '/';
 };
