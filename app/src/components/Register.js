@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
+import TextFieldGroup from './common/TextFieldGroup';
+
 import { registerUserAction } from '../actions/userAction';
 
 class Register extends Component {
@@ -80,67 +82,47 @@ class Register extends Component {
               <h1 className='display-4 text-center'>Sign Up</h1>
               <p className='lead text-center'>Create your DevConnector account</p>
               <form onSubmit={this.onSubmit}>
-                <div className='form-group'>
-                  <input
-                    type='text'
-                    className={`form-control form-control-lg ${errors.hasOwnProperty('firstName') && 'is-invalid'}`}
-                    placeholder='First Name'
-                    name='firstName'
-                    value={firstName}
-                    onChange={this.onChange} />
-                  {
-                    errors.hasOwnProperty('firstName') && errors.firstName.map((value, i) => <div key={i} className='invalid-feedback'>{value}</div>)
-                  }
-                </div>
-                <div className='form-group'>
-                  <input
-                    type='text'
-                    className={`form-control form-control-lg ${errors.hasOwnProperty('lastName') && 'is-invalid'}`}
-                    placeholder='Last Name'
-                    name='lastName'
-                    value={lastName}
-                    onChange={this.onChange} />
-                  {
-                    errors.hasOwnProperty('lastName') && errors.lastName.map((value, i) => <div key={i} className='invalid-feedback'>{value}</div>)
-                  }
-                </div>
-                <div className='form-group'>
-                  <input
-                    type='email'
-                    className={`form-control form-control-lg ${errors.hasOwnProperty('email') && 'is-invalid'}`}
-                    placeholder='Email Address'
-                    name='email'
-                    value={email}
-                    onChange={this.onChange} />
-                  <small className='form-text text-muted'>This site uses Gravatar so if you want a profile image, use a Gravatar email</small>
-                  {
-                    errors.hasOwnProperty('email') && errors.email.map((value, i) => <div key={i} className='invalid-feedback'>{value}</div>)
-                  }
-                </div>
-                <div className='form-group'>
-                  <input
-                    type='password'
-                    className={`form-control form-control-lg ${(errors.hasOwnProperty('password') || errors.hasOwnProperty('password2')) && 'is-invalid'}`}
-                    placeholder='Password'
-                    name='password'
-                    value={password}
-                    onChange={this.onChange} />
-                  {
-                    errors.hasOwnProperty('password') && errors.password.map((value, i) => <div key={i} className='invalid-feedback'>{value}</div>)
-                  }
-                </div>
-                <div className='form-group'>
-                  <input
-                    type='password'
-                    className={`form-control form-control-lg ${(errors.hasOwnProperty('password') || errors.hasOwnProperty('password2')) && 'is-invalid'}`}
-                    placeholder='Confirm Password'
-                    name='password2'
-                    value={password2}
-                    onChange={this.onChange} />
-                  {
-                    errors.hasOwnProperty('password2') && errors.password2.map((value, i) => <div key={i} className='invalid-feedback'>{value}</div>)
-                  }
-                </div>
+                <TextFieldGroup
+                  type='text'
+                  placeholder='First Name'
+                  name='firstName'
+                  value={firstName}
+                  onChange={this.onChange}
+                  errors={errors}
+                />
+                <TextFieldGroup
+                  type='text'
+                  placeholder='Last Name'
+                  name='lastName'
+                  value={lastName}
+                  onChange={this.onChange}
+                  errors={errors}
+                />
+                <TextFieldGroup
+                  type='email'
+                  placeholder='Email Address'
+                  name='email'
+                  value={email}
+                  onChange={this.onChange}
+                  info='This site uses Gravatar so if you want a profile image, use a Gravatar email'
+                  errors={errors}
+                />
+                <TextFieldGroup
+                  type='password'
+                  placeholder='Password'
+                  name='password'
+                  value={password}
+                  onChange={this.onChange}
+                  errors={errors}
+                />
+                <TextFieldGroup
+                  type='password'
+                  placeholder='Confirm Password'
+                  name='password2'
+                  value={password2}
+                  onChange={this.onChange}
+                  errors={errors}
+                />
                 <input type='submit' className='btn btn-info btn-block mt-4' />
               </form>
             </div>
