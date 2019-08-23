@@ -1,14 +1,20 @@
 const router = require('express').Router({ mergeParams: true });
-const passport = require('passport');
-const { body, param } = require('express-validator');
+const { body, param, query } = require('express-validator');
 
-const { handleUsed, validate } = require('../../middlewares');
+const { checkJwt, handleUsed, validate } = require('../../middlewares');
 const { ProfilesController } = require('../../controllers/api');
 
 router.route('/')
-  .get(ProfilesController.getProfiles)
+  .get([
+    checkJwt(false),
+    validate([
+      query('only')
+        .optional()
+        .isBoolean().withMessage('Only must be a valid boolean value').toBoolean(),
+    ]),
+  ], ProfilesController.getProfiles)
   .post([
-    passport.authenticate('jwt', { session: false }),
+    checkJwt(),
     validate([
       body('handle')
         .isLength({ min: 2, max: 40 }).withMessage('Handle must be minimum 2 characters long (40 max)')
@@ -109,7 +115,7 @@ router.route('/')
 
 router.route('/experience/')
   .post([
-    passport.authenticate('jwt', { session: false }),
+    checkJwt(),
     validate([
       body('title')
         .isLength({ min: 1 }).withMessage('Expirience title is required'),
@@ -134,7 +140,7 @@ router.route('/experience/')
 
 router.route('/experience/:id/')
   .delete([
-    passport.authenticate('jwt', { session: false }),
+    checkJwt(),
     validate([
       param('id')
         .isMongoId().withMessage('Expirience id must be a valid mongo id type'),
@@ -143,7 +149,7 @@ router.route('/experience/:id/')
 
 router.route('/education/')
   .post([
-    passport.authenticate('jwt', { session: false }),
+    checkJwt(),
     validate([
       body('school')
         .isLength({ min: 1 }).withMessage('Education school is required'),
@@ -167,7 +173,7 @@ router.route('/education/')
 
 router.route('/education/:id/')
   .delete([
-    passport.authenticate('jwt', { session: false }),
+    checkJwt(),
     validate([
       param('id')
         .isMongoId().withMessage('Education id must be a valid mongo id type'),
@@ -190,7 +196,7 @@ router.route('/:id/')
     ]),
   ], ProfilesController.getProfile)
   .delete([
-    passport.authenticate('jwt', { session: false }),
+    checkJwt(),
     validate([
       param('id')
         .isMongoId().withMessage('Profile id must be a valid mongo id type'),
