@@ -46,7 +46,7 @@ TextFieldGroup.propTypes = {
   disabled: PropTypes.string,
   label: PropTypes.string,
   info: PropTypes.string,
-  errors = PropTypes.object,
+  errors: PropTypes.object,
 };
 
 TextFieldGroup.defaultProps = {

@@ -3,11 +3,13 @@ import axios from 'axios';
 import ActionConstants from '../constants';
 import { setAuthToken, removeAuthToken, decodeAuthToken } from '../utils';
 
-export const logInUserType = payload => ({ type: ActionConstants.LOGIN_USER, payload });
+import { clearCurrentProfile } from './profileAction';
 
-export const logOutUserType = { type: ActionConstants.LOGOUT_USER };
+const logInUserType = payload => ({ type: ActionConstants.LOGIN_USER, payload });
 
-export const errorType = payload => ({ type: ActionConstants.GET_ERROR, payload });
+const logOutUserType = { type: ActionConstants.LOGOUT_USER };
+
+const errorType = payload => ({ type: ActionConstants.GET_ERROR, payload });
 
 /**
  * Action Creators
@@ -50,6 +52,8 @@ export const logInUserAction = (userData = null, jwt = null) => async (dispatch)
 export const logOutUserAction = () => (dispatch) => {
   removeAuthToken();
   dispatch(logOutUserType);
+
+  clearCurrentProfile()(dispatch);
 
   window.location.href = '/';
 };

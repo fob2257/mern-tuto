@@ -1,8 +1,7 @@
-import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 
-import userReducer from '../reducers/userReducer';
-import errorReducer from '../reducers/errorReducer';
+import rootReducer from '../reducers';
 
 const logger = store => next => action => {
   let result;
@@ -20,13 +19,13 @@ const logger = store => next => action => {
 };
 
 const middleware = [
-  logger,
+  // logger,
   thunk,
 ];
 
 export const storeFactory = (initialState = {}) =>
   compose(applyMiddleware(...middleware), window.__REDUX_DEVTOOLS_EXTENSION__ ? window.__REDUX_DEVTOOLS_EXTENSION__() : f => f)(createStore)(
-    combineReducers({ userReducer, errorReducer }),
+    rootReducer,
     initialState
   );
 

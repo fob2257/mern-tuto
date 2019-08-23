@@ -8,6 +8,7 @@ import Footer from './components/layout/Footer';
 
 import Register from './components/Register';
 import Login from './components/Login';
+import Dashboard from './components/Dashboard';
 
 import { storeFactory } from './stores';
 import { decodeAuthToken } from './utils';
@@ -37,6 +38,7 @@ function App() {
           <div className='container'>
             <Route path='/register' component={Register} />
             <Route path='/login' component={Login} />
+            <Route path='/dashboard' component={Dashboard} />
           </div>
           <Footer />
         </Router>
