@@ -3,9 +3,6 @@ const cors = require('cors');
 const helmet = require('helmet');
 const express = require('express');
 const compression = require('compression');
-const passport = require('passport');
-
-const { passportJwtStrategy } = require('./src/middlewares');
 
 const app = express();
 
@@ -23,9 +20,6 @@ app.use(express.urlencoded({
 //   req.db = (await db).models;
 //   next();
 // });
-
-app.use(passport.initialize());
-passportJwtStrategy(passport);
 
 app.use('/api', require('./src/routes/api'));
 

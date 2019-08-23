@@ -1,8 +1,7 @@
 const router = require('express').Router({ mergeParams: true });
-const passport = require('passport');
 const { body, param } = require('express-validator');
 
-const { emailUsed, validate } = require('../../middlewares');
+const { checkJwt, emailUsed, validate } = require('../../middlewares');
 const { UsersController } = require('../../controllers/api');
 
 router.route('/register/')
@@ -40,10 +39,10 @@ router.route('/login/')
   ]), UsersController.logInUser);
 
 router.route('/refresh/')
-  .post(passport.authenticate('jwt', { session: false }), UsersController.refreshToken);
+  .post(checkJwt(), UsersController.refreshToken);
 
 router.route('/me/')
-  .get(passport.authenticate('jwt', { session: false }), UsersController.myData);
+  .get(checkJwt(), UsersController.myData);
 
 router.route('/:id/profile/')
   .get([

@@ -1,14 +1,13 @@
 const router = require('express').Router({ mergeParams: true });
-const passport = require('passport');
 const { body, param } = require('express-validator');
 
-const { validate } = require('../../middlewares');
+const { checkJwt, validate } = require('../../middlewares');
 const { PostsController } = require('../../controllers/api');
 
 router.route('/')
   .get(PostsController.getPosts)
   .post([
-    passport.authenticate('jwt', { session: false }),
+    checkJwt(),
     validate([
       body('text')
         .isLength({ min: 2, max: 255 }).withMessage('Text must be minimum 2 characters long (255 max)'),
@@ -17,7 +16,7 @@ router.route('/')
 
 router.route('/:id/like/')
   .post([
-    passport.authenticate('jwt', { session: false }),
+    checkJwt(),
     validate([
       param('id')
         .isMongoId().withMessage('Post id must be a valid mongo id type'),
@@ -26,7 +25,7 @@ router.route('/:id/like/')
 
 router.route('/:id/comment/')
   .post([
-    passport.authenticate('jwt', { session: false }),
+    checkJwt(),
     validate([
       param('id')
         .isMongoId().withMessage('Post id must be a valid mongo id type'),
@@ -37,7 +36,7 @@ router.route('/:id/comment/')
 
 router.route('/:postId/comment/:commentId/')
   .delete([
-    passport.authenticate('jwt', { session: false }),
+    checkJwt(),
     validate([
       param('postId')
         .isMongoId().withMessage('Post id must be a valid mongo id type'),
@@ -54,7 +53,7 @@ router.route('/:id/')
     ]),
   ], PostsController.getPost)
   .delete([
-    passport.authenticate('jwt', { session: false }),
+    checkJwt(),
     validate([
       param('id')
         .isMongoId().withMessage('Post id must be a valid mongo id type'),
