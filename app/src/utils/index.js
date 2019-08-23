@@ -16,7 +16,7 @@ export const decodeAuthToken = (token) =>
     try {
       const decodedToken = jwtDecode(token) || {};
       const expirationTime = (decodedToken.hasOwnProperty('exp')) ? new Date(decodedToken.exp * 1000) : new Date();
-      const res = (Object.keys(token).length > 0 && expirationTime > new Date()) ? { decodedToken, expirationTime } : {};
+      const res = (Object.keys(token).length > 0 && expirationTime > new Date()) ? { decodedToken, expirationTime } : false;
 
       resolve(res);
     } catch (error) {

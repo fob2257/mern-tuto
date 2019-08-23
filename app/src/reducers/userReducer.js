@@ -13,6 +13,7 @@ export const user = (state = initialState, action) => {
 
     case ActionConstants.LOGIN_USER: {
       return {
+        ...state,
         isAuthenticated: Object.keys(action.payload).length > 0,
         data: action.payload,
       };
@@ -20,6 +21,7 @@ export const user = (state = initialState, action) => {
 
     case ActionConstants.LOGOUT_USER: {
       return {
+        ...state,
         isAuthenticated: false,
         data: {},
       };

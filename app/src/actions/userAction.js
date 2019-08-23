@@ -23,15 +23,24 @@ export const registerUserAction = (userData, history) => async (dispatch) => {
   }
 };
 
-export const logInUserAction = (userData) => async (dispatch) => {
+export const logInUserAction = (userData = null, jwt = null) => async (dispatch) => {
   try {
-    const res = await axios.post('/api/users/login/', { ...userData });
-    const { token } = res.data;
+    let token = jwt;
+
+    if (!token && userData) {
+      const res = await axios.post('/api/users/login/', { ...userData });
+
+      token = res.data.token;
+    }
 
     const data = await decodeAuthToken(token);
 
-    setAuthToken(token);
-    dispatch(logInUserType(data));
+    if (data) {
+      const { decodedToken, expirationTime } = data;
+
+      setAuthToken(token);
+      dispatch(logInUserType(decodedToken));
+    }
   } catch (error) {
     const { response: { data } } = error;
     dispatch(errorType(data));

@@ -33,8 +33,8 @@ const Navbar = (props) => {
                   <a href='#' className='nav-link' onClick={() => logOutUserAction()}>
                     <img
                       className='rounded-circle'
-                      src={data.decodedToken.avatar}
-                      alt={`${data.decodedToken.firstName} ${data.decodedToken.lastName}`}
+                      src={data.avatar}
+                      alt={`${data.firstName} ${data.lastName}`}
                       style={{ width: '25px', marginRight: '5px' }} />
                     {' '}
                     Logout

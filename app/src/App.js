@@ -10,8 +10,8 @@ import Register from './components/Register';
 import Login from './components/Login';
 
 import { storeFactory } from './stores';
-import { setAuthToken, decodeAuthToken } from './utils';
-import { logInUserType, logOutUserAction } from './actions/userAction';
+import { decodeAuthToken } from './utils';
+import { logInUserAction, logOutUserAction } from './actions/userAction';
 
 import './App.css';
 
@@ -20,14 +20,8 @@ const store = storeFactory();
 const token = localStorage.getItem('token');
 if (token) {
   decodeAuthToken(token)
-    .then((data) => {
-      if (Object.keys(data).length > 0) {
-        setAuthToken(token);
-        return store.dispatch(logInUserType(data));
-      }
-
-      logOutUserAction()(store.dispatch);
-    })
+    .then(data => (data) ? logInUserAction(null, token)(store.dispatch)
+      : logOutUserAction()(store.dispatch))
     .catch(() => {
       logOutUserAction()(store.dispatch);
     });
