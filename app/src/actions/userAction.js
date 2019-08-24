@@ -55,5 +55,5 @@ export const logOutUserAction = () => (dispatch) => {
 
   clearCurrentProfile()(dispatch);
 
-  window.location.href = '/';
+  // window.location.href = '/';
 };
