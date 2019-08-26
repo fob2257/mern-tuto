@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+
+import { createProfile } from '../actions/profileAction';
 
 import TextFieldGroup from './common/TextFieldGroup';
 import TextAreaFieldGroup from './common/TextAreaFieldGroup';
@@ -32,13 +35,79 @@ class CreateProfile extends Component {
     };
   };
 
-  changeDisplaySocialInputs = () => this.setState({ displaySocialInputs: !this.state.displaySocialInputs });
+  checkForEmptyValues = (obj = {}) => Object.entries(obj).reduce((acc, [key, value]) => ({
+    ...acc,
+    [key]: (value && value.length >= 1) ? value : undefined,
+  }), {});
 
-  onChange = (e) => this.setState({ [e.target.name]: e.target.value });
+  changeDisplaySocialInputs = () => {
+    this.setState({
+      social: {
+        youtube: '',
+        twitter: '',
+        facebook: '',
+        linkedin: '',
+        instagram: '',
+      },
+      displaySocialInputs: !this.state.displaySocialInputs,
+    });
+  };
+
+  onChange = (e) => {
+    const targetKeys = e.target.name.split('.');
+
+    const obj = targetKeys.reduceRight((acc, key, i) => ({
+      [key]: (i === targetKeys.length - 1) ? e.target.value : acc,
+    }), {});
+
+    this.setState(obj)
+  };
 
   onSubmit = (e) => {
     e.preventDefault();
+
+    const {
+      handle,
+      status,
+      company,
+      website,
+      location,
+      skills,
+      githubUsername,
+      bio,
+    } = this.state;
+
+    let { social } = this.state;
+
+    const body = this.checkForEmptyValues({
+      handle,
+      status,
+      company,
+      website,
+      location,
+      skills,
+      githubUsername,
+      bio,
+    });
+    social = this.checkForEmptyValues(social);
+
+    if (body.skills) {
+      body.skills = body.skills.split(',');
+    }
+
+    this.props.createProfile({ ...body, social }, this.props.history);
   };
+
+  componentWillReceiveProps(nextProps) {
+    const {
+      profileReducer: profile,
+      errorReducer: errors
+    } = nextProps;
+
+    if (errors) {
+      this.setState({ errors });
+    }
+  }
 
   render() {
     const options = [
@@ -132,10 +201,11 @@ class CreateProfile extends Component {
                   value={this.state.bio}
                   onChange={this.onChange}
                   errors={this.state.errors}
-                  info='Tell us a litte abou yourself'
+                  info='Tell us a litte about yourself'
                 />
                 <div className='mb-3'>
                   <button
+                    type='button'
                     className='btn btn-light'
                     onClick={this.changeDisplaySocialInputs}>
                     Add Social Network Links
@@ -153,7 +223,7 @@ class CreateProfile extends Component {
                           icon='fab fa-twitter'
                           value={this.state.social.twitter}
                           onChange={this.onChange}
-                          errors={this.errors}
+                          errors={this.state.errors}
                         />
                         <InputGroup
                           placeholder='Facebook Profile URL'
@@ -161,7 +231,7 @@ class CreateProfile extends Component {
                           icon='fab fa-facebook'
                           value={this.state.social.facebook}
                           onChange={this.onChange}
-                          errors={this.errors}
+                          errors={this.state.errors}
                         />
                         <InputGroup
                           placeholder='LinkedIn Profile URL'
@@ -169,7 +239,7 @@ class CreateProfile extends Component {
                           icon='fab fa-linkedin'
                           value={this.state.social.linkedin}
                           onChange={this.onChange}
-                          errors={this.errors}
+                          errors={this.state.errors}
                         />
                         <InputGroup
                           placeholder='Youtube Profile URL'
@@ -177,7 +247,7 @@ class CreateProfile extends Component {
                           icon='fab fa-youtube'
                           value={this.state.social.youtube}
                           onChange={this.onChange}
-                          errors={this.errors}
+                          errors={this.state.errors}
                         />
                         <InputGroup
                           placeholder='Instagram Profile URL'
@@ -185,12 +255,15 @@ class CreateProfile extends Component {
                           icon='fab fa-instagram'
                           value={this.state.social.instagram}
                           onChange={this.onChange}
-                          errors={this.errors}
+                          errors={this.state.errors}
                         />
                       </div>
                     )
                     : null
                 }
+                <div className='mb-3'>
+                  <input type='submit' className='btn btn-info btn-block mt-4' />
+                </div>
               </form>
             </div>
           </div>
@@ -203,10 +276,11 @@ class CreateProfile extends Component {
 CreateProfile.propTypes = {
   profileReducer: PropTypes.object.isRequired,
   errorReducer: PropTypes.object.isRequired,
+  createProfile: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = ({ profileReducer, errorReducer }) => ({ profileReducer, errorReducer });
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = { createProfile };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CreateProfile);
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(CreateProfile));

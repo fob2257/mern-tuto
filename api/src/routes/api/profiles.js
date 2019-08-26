@@ -34,7 +34,7 @@ router.route('/')
         .optional()
         .isLength({ min: 2, max: 255 }).withMessage('Location must be minimum 2 characters long (255 max)'),
       body('status')
-        .isLength({ min: 2, max: 255 }).withMessage('Status must be minimum 2 characters long (255 max)'),
+        .isLength({ min: 2, max: 255 }).withMessage('Status is required'),
       body('skills')
         .isArray().withMessage('Skills are required'),
       body('skills.*')

@@ -41,3 +41,18 @@ export const clearCurrentProfile = () => dispatch =>
     type: ActionConstants.GET_PROFILE,
     payload: null,
   });
+
+export const createProfile = (profileData, history) => async (dispatch) => {
+  try {
+    const res = await axios.post('/api/profiles', { ...profileData });
+
+    history.push('/dashboard');
+  } catch (error) {
+    const { response: { data } } = error;
+
+    dispatch({
+      type: ActionConstants.GET_ERROR,
+      payload: data,
+    });
+  }
+};
