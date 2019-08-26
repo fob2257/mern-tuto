@@ -1,54 +1,46 @@
 import React from 'react'
 import PropTypes from 'prop-types';
 
-const TextFieldGroup = ({
-  type,
-  placeholder,
+const SelectListGroup = ({
   name,
   value,
   onChange,
-  disabled,
-  label,
+  options,
   info,
-  errors = {},
+  errors,
 }) => (
     <div className='form-group'>
-      <input
-        type={type}
+      <select
         className={`form-control form-control-lg ${errors.hasOwnProperty(name) && 'is-invalid'}`}
-        placeholder={placeholder}
         name={name}
         value={value}
         onChange={onChange}
-        disabled={disabled} />
+      >
+        {
+          options.map(({ label, value }, i) => (<option key={i} value={value}>{label}</option>))
+        }
+      </select>
       {
         info && <small className='form-text text-muted'>{info}</small>
       }
       {
         errors.hasOwnProperty(name) && errors[name].map((value, i) => <div key={i} className='invalid-feedback'>{value}</div>)
       }
-      {/* {
-        errors.hasOwnProperty('message') &&
-        ((typeof errors.message === 'string' && <div className='invalid-feedback'>{errors.message}</div>)
-          || errors.message.map((value, i) => <div key={i} className='invalid-feedback'>{value}</div>))
-      } */}
     </div>
   );
 
-TextFieldGroup.propTypes = {
-  type: PropTypes.string.isRequired,
-  placeholder: PropTypes.string,
+SelectListGroup.propTypes = {
   name: PropTypes.string.isRequired,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   onChange: PropTypes.func.isRequired,
-  disabled: PropTypes.string,
-  label: PropTypes.string,
+  options: PropTypes.array.isRequired,
   info: PropTypes.string,
   errors: PropTypes.object,
 };
 
-TextFieldGroup.defaultProps = {
-  type: 'text',
+SelectListGroup.defaultProps = {
+  options: [],
+  errors: {},
 };
 
-export default TextFieldGroup;
+export default SelectListGroup;
