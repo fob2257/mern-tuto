@@ -1,3 +1,4 @@
+const { default: of } = require('await-of');
 const { Profile } = require('../../models/all-models');
 
 exports.getProfiles = async (req, res) => {
@@ -106,6 +107,28 @@ exports.getProfileByHandle = async (req, res) => {
   if (!profile) {
     return res.status(404).json({ message: 'Profile not found' });
   }
+
+  res.json(profile);
+};
+
+exports.updateProfile = async (req, res) => {
+  const { user: { id: user }, body, params: { id: _id } } = req;
+
+  const profileData = {
+    ...body,
+    user,
+    id: undefined,
+    experience: undefined,
+    education: undefined,
+  };
+
+  const profileExists = (await Profile.count({ _id, user }).exec()) > 0;
+
+  if (!profileExists) {
+    return res.status(404).json({ message: 'Profile not found' });
+  }
+
+  const profile = await Profile.findOneAndUpdate({ _id, user }, { $set: profileData }, { new: true }).exec();
 
   res.json(profile);
 };

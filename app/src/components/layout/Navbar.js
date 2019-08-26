@@ -30,6 +30,11 @@ const Navbar = (props) => {
             (isAuthenticated) ?
               <ul className='navbar-nav ml-auto'>
                 <li className='nav-item'>
+                  <Link to='/dashboard' className='nav-link'>
+                    Dashboard
+                  </Link>
+                </li>
+                <li className='nav-item'>
                   <a href='#' className='nav-link' onClick={() => logOutUserAction()}>
                     <img
                       className='rounded-circle'

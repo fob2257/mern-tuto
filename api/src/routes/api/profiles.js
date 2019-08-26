@@ -195,6 +195,66 @@ router.route('/:id/')
         .isMongoId().withMessage('Profile id must be a valid mongo id type'),
     ]),
   ], ProfilesController.getProfile)
+  .put([
+    checkJwt(),
+    validate([
+      param('id')
+        .isMongoId().withMessage('Profile id must be a valid mongo id type'),
+      body('handle')
+        .isLength({ min: 2, max: 40 }).withMessage('Handle must be minimum 2 characters long (40 max)')
+        .custom(async (value, { req }) => {
+          if (await handleUsed(value, req.user.id)) {
+            throw new Error('This handle is already beign used');
+          }
+          return true;
+        }),
+      body('company')
+        .optional()
+        .isLength({ max: 255 }).withMessage('Company must be minimum 2 characters long (255 max)'),
+      body('website')
+        .optional()
+        .isURL().withMessage('Website must be a valid URL'),
+      body('location')
+        .optional()
+        .isLength({ max: 255 }).withMessage('Location must be minimum 2 characters long (255 max)'),
+      body('status')
+        .isLength({ min: 2, max: 255 }).withMessage('Status is required'),
+      body('skills')
+        .isArray().withMessage('Skills are required'),
+      body('skills.*')
+        .isLength({ min: 1 }).withMessage('A skill is required'),
+      body('bio')
+        .optional()
+        .isLength({ max: 255 }).withMessage('Bio must be minimum 2 characters long (255 max)'),
+      body('githubUsername')
+        .optional()
+        .isLength({ max: 255 }).withMessage('Github Username must be minimum 2 characters long (255 max)'),
+      body('social')
+        .optional()
+        .custom((value) => {
+          if (typeof value !== 'object') {
+            throw new Error('Social must be a valid object');
+          }
+          return true;
+        }),
+      body('social.youtube')
+        .optional()
+        .isURL().withMessage('Social youtube must be a valid URL')
+        .contains('youtube').withMessage('Social youtube must be a valid youtube URL'),
+      body('social.twitter')
+        .optional()
+        .isURL().withMessage('Social twitter must be a valid URL')
+        .contains('twitter').withMessage('Social twitter must be a valid twitter URL'),
+      body('social.facebook')
+        .optional()
+        .isURL().withMessage('Social facebook must be a valid URL')
+        .contains('facebook').withMessage('Social facebook must be a valid facebook URL'),
+      body('social.linkedin')
+        .optional()
+        .isURL().withMessage('Social linkedin must be a valid URL')
+        .contains('linkedin').withMessage('Social linkedin must be a valid linkedin URL'),
+    ]),
+  ], ProfilesController.updateProfile)
   .delete([
     checkJwt(),
     validate([

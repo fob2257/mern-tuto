@@ -37,14 +37,38 @@ export const getCurrentProfile = () => async (dispatch) => {
 };
 
 export const clearCurrentProfile = () => dispatch =>
-  dispatch({
-    type: ActionConstants.GET_PROFILE,
+dispatch({
+  type: ActionConstants.GET_PROFILE,
     payload: null,
   });
 
 export const createProfile = (profileData, history) => async (dispatch) => {
   try {
     const res = await axios.post('/api/profiles', { ...profileData });
+
+    history.push('/dashboard');
+  } catch (error) {
+    const { response: { data } } = error;
+
+    dispatch({
+      type: ActionConstants.GET_ERROR,
+      payload: data,
+    });
+  }
+};
+
+export const updateCurrentProfile = (profileData, history) => async (dispatch) => {
+  try {
+    const res = await axios.put(`/api/profiles/${profileData.id}`, { ...profileData });
+
+    // const payload = res.data;
+
+    // if (payload) {
+    //   dispatch({
+    //     type: ActionConstants.GET_PROFILE,
+    //     payload,
+    //   });
+    // }
 
     history.push('/dashboard');
   } catch (error) {
