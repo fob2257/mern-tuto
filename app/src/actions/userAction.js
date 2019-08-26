@@ -25,6 +25,19 @@ export const registerUserAction = (userData, history) => async (dispatch) => {
   }
 };
 
+export const deleteUserAction = () => async (dispatch) => {
+  try {
+    if (window.confirm('Are you sure? This can NOT be undone!')) {
+      const res = await axios.delete('/api/users/me/');
+
+      logOutUserAction()(dispatch);
+    }
+  } catch (error) {
+    const { response: { data } } = error;
+    dispatch(errorType(data));
+  }
+};
+
 export const logInUserAction = (userData = null, jwt = null) => async (dispatch) => {
   try {
     let token = jwt;

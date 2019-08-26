@@ -42,7 +42,8 @@ router.route('/refresh/')
   .post(checkJwt(), UsersController.refreshToken);
 
 router.route('/me/')
-  .get(checkJwt(), UsersController.myData);
+  .get(checkJwt(), UsersController.myData)
+  .delete(checkJwt(), UsersController.deleteMyData);
 
 router.route('/:id/profile/')
   .get([

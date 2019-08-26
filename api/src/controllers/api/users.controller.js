@@ -111,3 +111,15 @@ exports.getUserProfile = async (req, res) => {
 
   res.json(profile);
 };
+
+
+exports.deleteMyData = async (req, res) => {
+  const { user: { id: user } } = req;
+
+  await Promise.all([
+    Profile.remove({ user }).exec(),
+    User.remove({ _id: user }).exec(),
+  ]);
+
+  res.status(204).send();
+};
