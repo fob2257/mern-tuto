@@ -11,6 +11,7 @@ import Footer from './components/layout/Footer';
 import Register from './components/Register';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
+import CreateProfile from './components/CreateProfile';
 
 import { storeFactory } from './stores';
 import { decodeAuthToken } from './utils';
@@ -42,6 +43,7 @@ function App() {
               <Route path='/register' component={Register} />
               <Route path='/login' component={Login} />
               <PrivateRoute path='/dashboard' component={Dashboard} />
+              <PrivateRoute path='/create-profile' component={CreateProfile} />
             </div>
             <Route component={Landing} />
           </Switch>

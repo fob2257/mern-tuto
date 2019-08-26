@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import Spinner from './layout/Spinner';
 import { getCurrentProfile } from '../actions/profileAction';
+
+import Spinner from './layout/Spinner';
 
 class Dashboard extends Component {
   constructor(props) {

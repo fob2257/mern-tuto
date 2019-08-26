@@ -36,9 +36,9 @@ router.route('/')
       body('status')
         .isLength({ min: 2, max: 255 }).withMessage('Status must be minimum 2 characters long (255 max)'),
       body('skills')
-        .isArray().withMessage('Skills must be a valid array'),
+        .isArray().withMessage('Skills are required'),
       body('skills.*')
-        .isLength({ min: 1 }).withMessage('Skill is required'),
+        .isLength({ min: 1 }).withMessage('A skill is required'),
       body('bio')
         .optional()
         .isLength({ min: 2, max: 255 }).withMessage('Bio must be minimum 2 characters long (255 max)'),
