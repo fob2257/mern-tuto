@@ -8,8 +8,8 @@ import { deleteUserAction } from '../actions/userAction';
 
 import Spinner from './layout/Spinner';
 import ProfileActions from './layout/ProfileActions';
-import Experiences from './Experiences';
-import Educations from './Educations';
+import Experiences from './layout/Experiences';
+import Educations from './layout/Educations';
 
 class Dashboard extends Component {
   onDeleteMyAccount = () => this.props.deleteUserAction();

@@ -184,3 +184,27 @@ export const clearProfiles = () => dispatch =>
     type: ActionConstants.GET_PROFILES,
     payload: null,
   });
+
+export const getProfileByHandle = handle => async (dispatch) => {
+  dispatch(setProfileLoading());
+  try {
+    const res = await axios.get(`/api/profiles/handle/${handle}/`);
+
+    const { data: payload } = res;
+
+    if (payload) {
+      dispatch({
+        type: ActionConstants.GET_PROFILE,
+        payload,
+      });
+    }
+  } catch (error) {
+    const { response: { data } } = error;
+
+    dispatch({
+      type: ActionConstants.GET_ERROR,
+      payload: data,
+    });
+  }
+  dispatch(setProfileLoading());
+};

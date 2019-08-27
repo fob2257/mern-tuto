@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { getProfiles } from '../actions/profileAction';
 
 import Spinner from './layout/Spinner';
-import ProfileItem from './ProfileItem';
+import ProfileItem from './layout/ProfileItem';
 
 class Profiles extends Component {
   componentDidMount() {

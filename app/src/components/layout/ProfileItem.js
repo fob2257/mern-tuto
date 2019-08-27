@@ -20,7 +20,7 @@ const ProfileItem = ({ data }) => (
         <p>
           {data.location && (<span>{data.location}</span>)}
         </p>
-        <Link to={`/profile/${data.handle}`} className='btn btn-info'> View Profile </Link>
+        <Link to={`/profiles/${data.handle}`} className='btn btn-info'> View Profile </Link>
       </div>
       <div className='col-md-4 d-none d-md-block'>
         <h4>Skill Set</h4>
