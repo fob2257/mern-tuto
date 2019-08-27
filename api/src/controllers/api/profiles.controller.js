@@ -24,12 +24,30 @@ exports.createProfile = async (req, res) => {
 };
 
 exports.createExperience = async (req, res) => {
-  const { user: { id: user }, body } = req;
+  const { user: { id: user } } = req;
+  let { body } = req;
 
   const profile = await Profile.findOne({ user }).exec();
 
   if (!profile) {
     return res.status(404).json({ message: 'Profile not found' });
+  }
+
+  body = {
+    ...body,
+    current: body.current === true,
+    to: (body.current) ? undefined : body.to,
+  };
+
+  profile.experience = (profile.experience === null) ? [] : profile.experience;
+
+  if (body.current && profile.experience.length) {
+    const recentExp = profile.experience.shift();
+
+    recentExp.current = false;
+    recentExp.to = new Date();
+
+    profile.experience.unshift(recentExp);
   }
 
   profile.experience.unshift(body);
@@ -40,12 +58,30 @@ exports.createExperience = async (req, res) => {
 };
 
 exports.createEducation = async (req, res) => {
-  const { user: { id: user }, body } = req;
+  const { user: { id: user } } = req;
+  let { body } = req;
 
   const profile = await Profile.findOne({ user }).exec();
 
   if (!profile) {
     return res.status(404).json({ message: 'Profile not found' });
+  }
+
+  body = {
+    ...body,
+    current: body.current === true,
+    to: (body.current) ? undefined : body.to,
+  };
+
+  profile.education = (profile.education === null) ? [] : profile.education;
+
+  if (body.current && profile.education.length) {
+    const recentEdu = profile.education.shift();
+
+    recentEdu.current = false;
+    recentEdu.to = new Date();
+
+    profile.education.unshift(recentEdu);
   }
 
   profile.education.unshift(body);

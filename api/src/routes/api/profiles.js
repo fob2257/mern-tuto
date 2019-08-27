@@ -126,12 +126,23 @@ router.route('/experience/')
         .isLength({ min: 2, max: 255 }).withMessage('Location must be minimum 2 characters long (255 max)'),
       body('from')
         .isISO8601().withMessage('Experience from must be a valid datetime'),
-      body('to')
-        .optional()
-        .isISO8601().withMessage('Experience to must be a valid datetime'),
       body('current')
         .optional()
         .isBoolean().withMessage('Experience current value must be boolean'),
+      body('to')
+        .custom((value, options) => {
+          const { req: { body: { current, from } } } = options;
+
+          if (!value && !current) {
+            throw new Error('This date is required if is not your actual job');
+          }
+          if (value && !current && new Date(value).getTime() <= new Date(from).getTime()) {
+            throw new Error('This date cannot be lower or equal than from datetime');
+          }
+          return true;
+        })
+        .if((value, { req }) => !req.body.current)
+        .isISO8601().withMessage('Experience to must be a valid datetime'),
       body('description')
         .optional()
         .isLength({ min: 2, max: 255 }).withMessage('Experience description must be minimum 2 characters long (255 max)'),
@@ -159,12 +170,23 @@ router.route('/education/')
         .isLength({ min: 1 }).withMessage('Education field of study is required'),
       body('from')
         .isISO8601().withMessage('Education from must be a valid datetime'),
-      body('to')
-        .optional()
-        .isISO8601().withMessage('Education to must be a valid datetime'),
       body('current')
         .optional()
         .isBoolean().withMessage('Education current value must be boolean'),
+      body('to')
+        .custom((value, options) => {
+          const { req: { body: { current, from } } } = options;
+
+          if (!value && !current) {
+            throw new Error('This date is required if is not your actual field study');
+          }
+          if (value && !current && new Date(value).getTime() <= new Date(from).getTime()) {
+            throw new Error('This date cannot be lower or equal than from datetime');
+          }
+          return true;
+        })
+        .if((value, { req }) => !req.body.current)
+        .isISO8601().withMessage('Education to must be a valid datetime'),
       body('description')
         .optional()
         .isLength({ min: 2, max: 255 }).withMessage('Education description must be minimum 2 characters long (255 max)'),
