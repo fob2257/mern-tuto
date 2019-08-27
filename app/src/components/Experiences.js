@@ -45,7 +45,7 @@ Experiences.propTypes = {
   deleteExperience: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = (state) => null;
+const mapStateToProps = (state) => { };
 
 const mapDispatchToProps = { deleteExperience };
 

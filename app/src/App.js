@@ -15,6 +15,7 @@ import CreateProfile from './components/CreateProfile';
 import EditProfile from './components/EditProfile';
 import AddExperience from './components/AddExperience';
 import AddEducation from './components/AddEducation';
+import Profiles from './components/Profiles';
 
 import { storeFactory } from './stores';
 import { decodeAuthToken } from './utils';
@@ -50,8 +51,9 @@ function App() {
               <PrivateRoute path='/edit-profile' component={EditProfile} />
               <PrivateRoute path='/add-experience' component={AddExperience} />
               <PrivateRoute path='/add-education' component={AddEducation} />
+              <PrivateRoute path='/profiles' component={Profiles} />
             </div>
-            <Route component={Landing} />
+            {/* <Route component={Landing} /> */}
           </Switch>
           <Footer />
         </Router>

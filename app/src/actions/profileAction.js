@@ -154,3 +154,33 @@ export const deleteEducation = id => async (dispatch) => {
     });
   }
 };
+
+export const getProfiles = () => async (dispatch) => {
+  dispatch(setProfileLoading());
+  try {
+    const res = await axios.get('/api/profiles/');
+
+    const { data: payload } = res;
+
+    if (payload) {
+      dispatch({
+        type: ActionConstants.GET_PROFILES,
+        payload,
+      });
+    }
+  } catch (error) {
+    const { response: { data } } = error;
+
+    dispatch({
+      type: ActionConstants.GET_ERROR,
+      payload: data,
+    });
+  }
+  dispatch(setProfileLoading());
+};
+
+export const clearProfiles = () => dispatch =>
+  dispatch({
+    type: ActionConstants.GET_PROFILES,
+    payload: null,
+  });

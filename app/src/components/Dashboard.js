@@ -45,7 +45,7 @@ class Dashboard extends Component {
                     )
                       : (
                         <div>
-                          <p>A profile was found</p>
+                          {/* <p>A profile was found</p> */}
                           <ProfileActions />
                           <Experiences data={(profile.experience) ? profile.experience : []} />
                           <Educations data={(profile.education) ? profile.education : []} />

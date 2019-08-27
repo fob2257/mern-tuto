@@ -4,8 +4,10 @@ const { Profile } = require('../../models/all-models');
 exports.getProfiles = async (req, res) => {
   const { user, query: { only } } = req;
 
+  // eslint-disable-next-line no-nested-ternary
   const profiles = (user && only) ? await Profile.find({ user: user.id }).populate('user', ['firstName', 'lastName', 'avatar']).exec()
-    : await Profile.find().populate('user', ['firstName', 'lastName', 'avatar']).exec();
+    : (user) ? await Profile.find({ user: { $ne: user.id } }).populate('user', ['firstName', 'lastName', 'avatar']).exec()
+      : await Profile.find().populate('user', ['firstName', 'lastName', 'avatar']).exec();
 
   res.json(profiles);
 };
