@@ -37,8 +37,8 @@ export const getCurrentProfile = () => async (dispatch) => {
 };
 
 export const clearCurrentProfile = () => dispatch =>
-dispatch({
-  type: ActionConstants.GET_PROFILE,
+  dispatch({
+    type: ActionConstants.GET_PROFILE,
     payload: null,
   });
 
@@ -84,6 +84,21 @@ export const updateCurrentProfile = (profileData, history) => async (dispatch) =
 export const addExperience = (experienceData, history) => async (dispatch) => {
   try {
     const res = await axios.post('/api/profiles/experience/', { ...experienceData });
+
+    history.push('/dashboard');
+  } catch (error) {
+    const { response: { data } } = error;
+
+    dispatch({
+      type: ActionConstants.GET_ERROR,
+      payload: data,
+    });
+  }
+};
+
+export const addEducation = (educationData, history) => async (dispatch) => {
+  try {
+    const res = await axios.post('/api/profiles/education/', { ...educationData });
 
     history.push('/dashboard');
   } catch (error) {
