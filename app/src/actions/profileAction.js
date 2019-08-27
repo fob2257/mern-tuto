@@ -80,3 +80,18 @@ export const updateCurrentProfile = (profileData, history) => async (dispatch) =
     });
   }
 };
+
+export const addExperience = (experienceData, history) => async (dispatch) => {
+  try {
+    const res = await axios.post('/api/profiles/experience/', { ...experienceData });
+
+    history.push('/dashboard');
+  } catch (error) {
+    const { response: { data } } = error;
+
+    dispatch({
+      type: ActionConstants.GET_ERROR,
+      payload: data,
+    });
+  }
+};
