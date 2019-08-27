@@ -110,3 +110,47 @@ export const addEducation = (educationData, history) => async (dispatch) => {
     });
   }
 };
+
+export const deleteExperience = id => async (dispatch) => {
+  try {
+    const res = await axios.delete(`/api/profiles/experience/${id}/`);
+
+    const { data: payload } = res;
+
+    if (payload) {
+      dispatch({
+        type: ActionConstants.GET_PROFILE,
+        payload,
+      });
+    }
+  } catch (error) {
+    const { response: { data } } = error;
+
+    dispatch({
+      type: ActionConstants.GET_ERROR,
+      payload: data,
+    });
+  }
+};
+
+export const deleteEducation = id => async (dispatch) => {
+  try {
+    const res = await axios.delete(`/api/profiles/education/${id}/`);
+
+    const { data: payload } = res;
+
+    if (payload) {
+      dispatch({
+        type: ActionConstants.GET_PROFILE,
+        payload,
+      });
+    }
+  } catch (error) {
+    const { response: { data } } = error;
+
+    dispatch({
+      type: ActionConstants.GET_ERROR,
+      payload: data,
+    });
+  }
+};

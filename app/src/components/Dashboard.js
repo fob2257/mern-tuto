@@ -8,12 +8,10 @@ import { deleteUserAction } from '../actions/userAction';
 
 import Spinner from './layout/Spinner';
 import ProfileActions from './layout/ProfileActions';
+import Experiences from './Experiences';
+import Educations from './Educations';
 
 class Dashboard extends Component {
-  constructor(props) {
-    super(props);
-  };
-
   onDeleteMyAccount = () => this.props.deleteUserAction();
 
   componentDidMount() {
@@ -49,6 +47,8 @@ class Dashboard extends Component {
                         <div>
                           <p>A profile was found</p>
                           <ProfileActions />
+                          <Experiences data={(profile.experience) ? profile.experience : []} />
+                          <Educations data={(profile.education) ? profile.education : []} />
                           <div style={{ marginBottom: '60px' }} />
                           <button onClick={this.onDeleteMyAccount} className='btn btn-danger'>Delete My Account</button>
                         </div>

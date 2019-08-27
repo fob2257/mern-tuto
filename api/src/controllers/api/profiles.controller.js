@@ -94,7 +94,7 @@ exports.createEducation = async (req, res) => {
 exports.deleteExperience = async (req, res) => {
   const { user: { id: user }, params: { id: expId } } = req;
 
-  const profile = await Profile.findOne({ user }).exec();
+  const profile = await Profile.findOne({ user }).populate('user', ['firstName', 'lastName', 'avatar']).exec();
 
   if (!profile) {
     return res.status(404).json({ message: 'Profile not found' });
@@ -110,7 +110,7 @@ exports.deleteExperience = async (req, res) => {
 exports.deleteEducation = async (req, res) => {
   const { user: { id: user }, params: { id: eduId } } = req;
 
-  const profile = await Profile.findOne({ user }).exec();
+  const profile = await Profile.findOne({ user }).populate('user', ['firstName', 'lastName', 'avatar']).exec();
 
   if (!profile) {
     return res.status(404).json({ message: 'Profile not found' });
