@@ -57,9 +57,9 @@ function App() {
               <Route exact path='/profiles' component={Profiles} />
               <Route path='/profiles/:handle' component={Profile} />
               <Route path='/not-found' component={NotFound} />
-              <PrivateRoute exact path='/feed' component={Posts} />
+              <PrivateRoute path='/feed' component={Posts} />
             </div>
-            <Route component={NotFound} />
+            {/* <Route component={NotFound} /> */}
           </Switch>
           <Footer />
         </Router>

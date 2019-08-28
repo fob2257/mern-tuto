@@ -29,6 +29,13 @@ export const post = (state = initialState, action) => {
       };
     }
 
+    case ActionConstants.REMOVE_POST: {
+      return {
+        ...state,
+        posts: (!state.posts) ? state.posts : state.posts.filter(p => p._id !== action.payload),
+      };
+    }
+
     default: { return state; }
   }
 };

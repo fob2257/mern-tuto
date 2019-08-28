@@ -8,6 +8,8 @@ const postType = payload => ({ type: ActionConstants.SET_POST, payload });
 
 const postsType = payload => ({ type: ActionConstants.SET_POSTS, payload });
 
+const removePostType = payload => ({ type: ActionConstants.REMOVE_POST, payload });
+
 const errorType = payload => ({ type: ActionConstants.SET_ERROR, payload });
 
 /**
@@ -47,6 +49,8 @@ export const createPost = postData => async (dispatch) => {
 export const likePost = id => async (dispatch) => {
   try {
     const res = await axios.post(`/api/posts/${id}/like/`);
+
+    dispatch(getPosts());
   } catch (error) {
     const { response: { data } } = error;
 
@@ -58,6 +62,7 @@ export const commentPost = ({ id, text }) => async (dispatch) => {
   try {
     const res = await axios.post(`/api/posts/${id}/comment/`, { text });
 
+    dispatch(getPosts());
   } catch (error) {
     const { response: { data } } = error;
 
@@ -69,6 +74,7 @@ export const deleteCommentPost = ({ postId, commentId }) => async (dispatch) => 
   try {
     const res = await axios.delete(`/api/posts/${postId}/comment/${commentId}/`);
 
+    dispatch(getPosts());
   } catch (error) {
     const { response: { data } } = error;
 
@@ -99,8 +105,7 @@ export const deletePost = id => async (dispatch) => {
   try {
     await axios.delete(`/api/posts/${id}/`);
 
-    dispatch(getPosts());
-    dispatch(clearPost());
+    dispatch(removePostType(id));
   } catch (error) {
     const { response: { data } } = error;
 

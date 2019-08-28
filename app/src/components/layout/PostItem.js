@@ -3,12 +3,13 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import { deletePost } from '../../actions/postAction';
+import { deletePost, likePost } from '../../actions/postAction';
 
 const PostItem = ({
   data,
   userReducer: user,
   deletePost,
+  likePost,
 }) => (
     <div className='card card-body mb-3'>
       <div className='row'>
@@ -27,13 +28,16 @@ const PostItem = ({
           <p className='lead'>
             {data.text}
           </p>
-          <button type='button' className='btn btn-light mr-1'>
-            <i className='text-info fas fa-thumbs-up'></i>
+          <button
+            type='button'
+            onClick={() => likePost(data._id)}
+            className='btn btn-light mr-1'>
+            <i className={`fas fa-thumbs-up ${(data.likes.some(like => like.user._id === user.data.id)) ? 'text-info' : null}`}></i>
             <span className='badge badge-light'>{data.likes.length}</span>
           </button>
-          <button type='button' className='btn btn-light mr-1'>
+          {/* <button type='button' className='btn btn-light mr-1'>
             <i className='text-secondary fas fa-thumbs-down'></i>
-          </button>
+          </button> */}
           <Link to={`/posts/${data._id}`} className='btn btn-info mr-1'>
             Comments
         </Link>
@@ -55,10 +59,11 @@ PostItem.propTypes = {
   data: PropTypes.object.isRequired,
   userReducer: PropTypes.object.isRequired,
   deletePost: PropTypes.func.isRequired,
+  likePost: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = ({ userReducer }) => ({ userReducer });
 
-const mapDispatchToProps = { deletePost };
+const mapDispatchToProps = { deletePost, likePost };
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostItem);

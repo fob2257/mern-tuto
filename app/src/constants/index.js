@@ -12,6 +12,7 @@ const ActionConstants = {
   SET_POST: 'SET_POST',
   SET_POSTS: 'SET_POSTS',
   SET_LOADING_POST: 'SET_LOADING_POST',
+  REMOVE_POST: 'REMOVE_POST',
 };
 
 export default ActionConstants;
