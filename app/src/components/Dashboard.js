@@ -32,7 +32,7 @@ class Dashboard extends Component {
               <h1 className='display-4'>Dashboard</h1>
               <div>
                 <p className='lead text-muted'>Welcome {(profile) ?
-                  (<Link to={`/profile/${profile.handle}`}>{fullName}</Link>) : `${fullName}`}</p>
+                  (<Link to={`/profiles/${profile.handle}`}>{fullName}</Link>) : `${fullName}`}</p>
                 {
                   (loading) ? <Spinner />
                     : (!profile) ? (

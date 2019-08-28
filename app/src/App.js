@@ -7,6 +7,7 @@ import PrivateRoute from './components/common/PrivateRoute';
 import Navbar from './components/layout/Navbar';
 import Landing from './components/layout/Landing';
 import Footer from './components/layout/Footer';
+import NotFound from './components/layout/NotFound';
 
 import Register from './components/Register';
 import Login from './components/Login';
@@ -54,8 +55,9 @@ function App() {
               <PrivateRoute path='/add-education' component={AddEducation} />
               <Route exact path='/profiles' component={Profiles} />
               <Route path='/profiles/:handle' component={Profile} />
+              <Route path='/not-found' component={NotFound} />
             </div>
-            {/* <Route component={Landing} /> */}
+            <Route component={NotFound} />
           </Switch>
           <Footer />
         </Router>
