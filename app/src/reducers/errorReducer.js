@@ -4,7 +4,7 @@ const initialState = {};
 
 export const error = (state = initialState, action) => {
   switch (action.type) {
-    case ActionConstants.GET_ERROR: {
+    case ActionConstants.SET_ERROR: {
       return action.payload;
     }
 

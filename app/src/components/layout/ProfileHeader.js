@@ -25,35 +25,35 @@ const ProfileHeader = ({ data }) => (
           <p>
             {
               data.website && (
-                <a className='text-white p-2' href={data.website} target='_blank'>
+                <a className='text-white p-2' href={data.website} target='_blank' rel='noopener noreferrer'>
                   <i className='fas fa-globe fa-2x'></i>
                 </a>
               )
             }
             {
               data.social && data.social.twitter && (
-                <a className='text-white p-2' href={data.social.twitter} target='_blank'>
+                <a className='text-white p-2' href={data.social.twitter} target='_blank' rel='noopener noreferrer'>
                   <i className='fab fa-twitter fa-2x'></i>
                 </a>
               )
             }
             {
               data.social && data.social.facebook && (
-                <a className='text-white p-2' href={data.social.facebook} target='_blank'>
+                <a className='text-white p-2' href={data.social.facebook} target='_blank' rel='noopener noreferrer'>
                   <i className='fab fa-facebook fa-2x'></i>
                 </a>
               )
             }
             {
               data.social && data.social.linkedin && (
-                <a className='text-white p-2' href={data.social.linkedin} target='_blank'>
+                <a className='text-white p-2' href={data.social.linkedin} target='_blank' rel='noopener noreferrer'>
                   <i className='fab fa-linkedin fa-2x'></i>
                 </a>
               )
             }
             {
               data.social && data.social.youtube && (
-                <a className='text-white p-2' href={data.social.youtube} target='_blank'>
+                <a className='text-white p-2' href={data.social.youtube} target='_blank' rel='noopener noreferrer'>
                   <i className='fab fa-youtube fa-2x'></i>
                 </a>
               )

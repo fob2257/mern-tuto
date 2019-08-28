@@ -9,7 +9,7 @@ const logInUserType = payload => ({ type: ActionConstants.LOGIN_USER, payload })
 
 const logOutUserType = { type: ActionConstants.LOGOUT_USER };
 
-const errorType = payload => ({ type: ActionConstants.GET_ERROR, payload });
+const errorType = payload => ({ type: ActionConstants.SET_ERROR, payload });
 
 /**
  * Action Creators

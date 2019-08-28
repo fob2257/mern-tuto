@@ -30,6 +30,11 @@ const Navbar = (props) => {
             (isAuthenticated) ?
               <ul className='navbar-nav ml-auto'>
                 <li className='nav-item'>
+                  <Link to='/feed' className='nav-link'>
+                    Post Feed
+                  </Link>
+                </li>
+                <li className='nav-item'>
                   <Link to='/dashboard' className='nav-link'>
                     Dashboard
                   </Link>
@@ -40,7 +45,8 @@ const Navbar = (props) => {
                       className='rounded-circle'
                       src={data.avatar}
                       alt={`${data.firstName} ${data.lastName}`}
-                      style={{ width: '25px', marginRight: '5px' }} />
+                      style={{ width: '25px', marginRight: '5px' }}
+                    />
                     {' '}
                     Logout
                     </a>

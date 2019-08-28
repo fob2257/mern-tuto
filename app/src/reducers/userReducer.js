@@ -7,10 +7,6 @@ const initialState = {
 
 export const user = (state = initialState, action) => {
   switch (action.type) {
-    // case ActionConstants.REGISTER_USER: {
-    //   return { data: action.payload };
-    // }
-
     case ActionConstants.LOGIN_USER: {
       return {
         ...state,

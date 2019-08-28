@@ -1,31 +1,31 @@
 import ActionConstants from '../constants';
 
 const initialState = {
-  profile: null,
-  profiles: null,
+  post: null,
+  posts: null,
   loading: false,
 };
 
-export const profile = (state = initialState, action) => {
+export const post = (state = initialState, action) => {
   switch (action.type) {
-    case ActionConstants.SET_LOADING_PROFILE: {
+    case ActionConstants.SET_LOADING_POST: {
       return {
         ...state,
         loading: !state.loading,
       };
     }
 
-    case ActionConstants.SET_PROFILE: {
+    case ActionConstants.SET_POST: {
       return {
         ...state,
-        profile: action.payload,
+        post: action.payload,
       };
     }
 
-    case ActionConstants.SET_PROFILES: {
+    case ActionConstants.SET_POSTS: {
       return {
         ...state,
-        profiles: action.payload,
+        posts: action.payload,
       };
     }
 
@@ -33,4 +33,4 @@ export const profile = (state = initialState, action) => {
   }
 };
 
-export default profile;
+export default post;

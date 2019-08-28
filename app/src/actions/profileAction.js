@@ -2,14 +2,20 @@ import axios from 'axios';
 
 import ActionConstants from '../constants';
 
+const loadingProfileType = { type: ActionConstants.SET_LOADING_PROFILE };
+
+const profileType = payload => ({ type: ActionConstants.SET_PROFILE, payload });
+
+const profilesType = payload => ({ type: ActionConstants.SET_PROFILES, payload });
+
+const errorType = payload => ({ type: ActionConstants.SET_ERROR, payload });
+
 /**
  * Action Creators
  */
 
-const setProfileLoading = () => ({ type: ActionConstants.LOADING_PROFILE });
-
 export const getCurrentProfile = () => async (dispatch) => {
-  dispatch(setProfileLoading());
+  dispatch(loadingProfileType);
   try {
     const res = await axios.get('/api/profiles/', {
       params: {
@@ -20,27 +26,18 @@ export const getCurrentProfile = () => async (dispatch) => {
     const [payload] = res.data;
 
     if (payload) {
-      dispatch({
-        type: ActionConstants.GET_PROFILE,
-        payload,
-      });
+      dispatch(profileType(payload));
     }
   } catch (error) {
     const { response: { data } } = error;
 
-    dispatch({
-      type: ActionConstants.GET_ERROR,
-      payload: data,
-    });
+    dispatch(errorType(data));
   }
-  dispatch(setProfileLoading());
+  dispatch(loadingProfileType);
 };
 
 export const clearCurrentProfile = () => dispatch =>
-  dispatch({
-    type: ActionConstants.GET_PROFILE,
-    payload: null,
-  });
+  dispatch(profileType(null));
 
 export const createProfile = (profileData, history) => async (dispatch) => {
   try {
@@ -50,10 +47,7 @@ export const createProfile = (profileData, history) => async (dispatch) => {
   } catch (error) {
     const { response: { data } } = error;
 
-    dispatch({
-      type: ActionConstants.GET_ERROR,
-      payload: data,
-    });
+    dispatch(errorType(data));
   }
 };
 
@@ -64,20 +58,14 @@ export const updateCurrentProfile = (profileData, history) => async (dispatch) =
     // const payload = res.data;
 
     // if (payload) {
-    //   dispatch({
-    //     type: ActionConstants.GET_PROFILE,
-    //     payload,
-    //   });
+    //   dispatch(profileType(payload));
     // }
 
     history.push('/dashboard');
   } catch (error) {
     const { response: { data } } = error;
 
-    dispatch({
-      type: ActionConstants.GET_ERROR,
-      payload: data,
-    });
+    dispatch(errorType(data));
   }
 };
 
@@ -89,10 +77,7 @@ export const addExperience = (experienceData, history) => async (dispatch) => {
   } catch (error) {
     const { response: { data } } = error;
 
-    dispatch({
-      type: ActionConstants.GET_ERROR,
-      payload: data,
-    });
+    dispatch(errorType(data));
   }
 };
 
@@ -104,10 +89,7 @@ export const addEducation = (educationData, history) => async (dispatch) => {
   } catch (error) {
     const { response: { data } } = error;
 
-    dispatch({
-      type: ActionConstants.GET_ERROR,
-      payload: data,
-    });
+    dispatch(errorType(data));
   }
 };
 
@@ -118,18 +100,12 @@ export const deleteExperience = id => async (dispatch) => {
     const { data: payload } = res;
 
     if (payload) {
-      dispatch({
-        type: ActionConstants.GET_PROFILE,
-        payload,
-      });
+      dispatch(profileType(payload));
     }
   } catch (error) {
     const { response: { data } } = error;
 
-    dispatch({
-      type: ActionConstants.GET_ERROR,
-      payload: data,
-    });
+    dispatch(errorType(data));
   }
 };
 
@@ -140,71 +116,50 @@ export const deleteEducation = id => async (dispatch) => {
     const { data: payload } = res;
 
     if (payload) {
-      dispatch({
-        type: ActionConstants.GET_PROFILE,
-        payload,
-      });
+      dispatch(profileType(payload));
     }
   } catch (error) {
     const { response: { data } } = error;
 
-    dispatch({
-      type: ActionConstants.GET_ERROR,
-      payload: data,
-    });
+    dispatch(errorType(data));
   }
 };
 
 export const getProfiles = () => async (dispatch) => {
-  dispatch(setProfileLoading());
+  dispatch(loadingProfileType);
   try {
     const res = await axios.get('/api/profiles/');
 
     const { data: payload } = res;
 
     if (payload) {
-      dispatch({
-        type: ActionConstants.GET_PROFILES,
-        payload,
-      });
+      dispatch(profilesType(payload));
     }
   } catch (error) {
     const { response: { data } } = error;
 
-    dispatch({
-      type: ActionConstants.GET_ERROR,
-      payload: data,
-    });
+    dispatch(errorType(data));
   }
-  dispatch(setProfileLoading());
+  dispatch(loadingProfileType);
 };
 
 export const clearProfiles = () => dispatch =>
-  dispatch({
-    type: ActionConstants.GET_PROFILES,
-    payload: null,
-  });
+  dispatch(profilesType(null));
 
 export const getProfileByHandle = handle => async (dispatch) => {
-  dispatch(setProfileLoading());
+  dispatch(loadingProfileType);
   try {
     const res = await axios.get(`/api/profiles/handle/${handle}/`);
 
     const { data: payload } = res;
 
     if (payload) {
-      dispatch({
-        type: ActionConstants.GET_PROFILE,
-        payload,
-      });
+      dispatch(profileType(payload));
     }
   } catch (error) {
     const { response: { data } } = error;
 
-    dispatch({
-      type: ActionConstants.GET_ERROR,
-      payload: data,
-    });
+    dispatch(errorType(data));
   }
-  dispatch(setProfileLoading());
+  dispatch(loadingProfileType);
 };
