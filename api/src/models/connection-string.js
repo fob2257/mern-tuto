@@ -6,7 +6,7 @@
 
 const url = require('url');
 
-const { mongoURI } = require('../../config/keys.json');
+const { mongoURI } = require('../../config/keys.dev');
 
 const uri = mongoURI;
 if (!uri) {
