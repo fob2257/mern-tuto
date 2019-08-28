@@ -7,6 +7,8 @@ import { getPost } from '../actions/postAction';
 
 import Spinner from './layout/Spinner';
 import PostItem from './layout/PostItem';
+import CommentForm from './layout/CommentForm';
+import CommentFeed from './layout/CommentFeed';
 
 class Post extends Component {
   componentDidMount() {
@@ -27,8 +29,14 @@ class Post extends Component {
             <div className='col-md-12'>
               <Link to='/feed' className='btn btn-light mb-3'>Back To Feed</Link>
               {
-                (loading || !post) ? <Spinner />
-                  : <PostItem data={post} showActions={false} />
+                (loading || !post || !Object.keys(post).length) ? <Spinner />
+                  : (
+                    <div>
+                      <PostItem data={post} showActions={false} />
+                      <CommentForm postId={post._id} />
+                      <CommentFeed postId={post._id} comments={(post.comments) ? post.comments : []} />
+                    </div>
+                  )
               }
             </div>
           </div>

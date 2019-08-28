@@ -35,6 +35,7 @@ export const getPosts = () => async (dispatch) => {
 export const clearPosts = () => dispatch => dispatch(postsType(null));
 
 export const createPost = postData => async (dispatch) => {
+  dispatch(errorType({}));
   try {
     const res = await axios.post('/api/posts/', { ...postData });
 
@@ -59,10 +60,11 @@ export const likePost = id => async (dispatch) => {
 };
 
 export const commentPost = ({ id, text }) => async (dispatch) => {
+  dispatch(errorType({}));
   try {
     const res = await axios.post(`/api/posts/${id}/comment/`, { text });
 
-    dispatch(getPosts());
+    dispatch(getPost(id));
   } catch (error) {
     const { response: { data } } = error;
 
@@ -74,7 +76,7 @@ export const deleteCommentPost = ({ postId, commentId }) => async (dispatch) => 
   try {
     const res = await axios.delete(`/api/posts/${postId}/comment/${commentId}/`);
 
-    dispatch(getPosts());
+    dispatch(getPost(postId));
   } catch (error) {
     const { response: { data } } = error;
 
