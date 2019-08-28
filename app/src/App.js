@@ -19,6 +19,7 @@ import AddEducation from './components/AddEducation';
 import Profiles from './components/Profiles';
 import Profile from './components/Profile';
 import Posts from './components/Posts';
+import Post from './components/Post';
 
 import { storeFactory } from './stores';
 import { decodeAuthToken } from './utils';
@@ -57,7 +58,8 @@ function App() {
               <Route exact path='/profiles' component={Profiles} />
               <Route path='/profiles/:handle' component={Profile} />
               <Route path='/not-found' component={NotFound} />
-              <PrivateRoute path='/feed' component={Posts} />
+              <PrivateRoute exact path='/feed' component={Posts} />
+              <PrivateRoute path='/feed/:id' component={Post} />
             </div>
             {/* <Route component={NotFound} /> */}
           </Switch>
