@@ -1,3 +1,4 @@
+const path = require('path');
 const morgan = require('morgan');
 const cors = require('cors');
 const helmet = require('helmet');
@@ -29,6 +30,15 @@ app.use((error, req, res, next) => {
   res.status(error.status || 500).json(error);
 });
 /* eslint-enable no-unused-vars */
+
+/**
+ * Static files
+ */
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static('static/build'));
+
+  app.get('*', (req, res) => res.sendFile(path.resolve(__dirname, 'static', 'build', 'index.html')));
+}
 
 /**
  * Logger
